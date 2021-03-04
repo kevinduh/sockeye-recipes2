@@ -1,14 +1,12 @@
 # sockeye-recipes2
 
 Training scripts and recipes for the Sockeye Neural Machine Translation (NMT) toolkit
-- The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye)
-- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 2.3.10
-- Here we focus on sockeye v2. There is an older version of [sockeye-recipes for sockeye v1](https://github.com/kevinduh/sockeye-recipes).
+- The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye). This repo is based off [a stable fork](https://github.com/kevinduh/sockeye), version: 2.3.10
+- Here we focus on Sockeye v2. This repo is similar but not exactly back-compatible with the older version of [sockeye-recipes for Sockeye v1](https://github.com/kevinduh/sockeye-recipes).
 
-This package contains scripts that makes it easy to run NMT experiments.
-The way to use this package is to specify settings in a file like "hyperparams.txt", 
-then run the following scripts:
-- scripts/preprocess.sh: Preprocess bitext via subword segmentation
+This repo contains scripts that makes it easy to run and replicate NMT experiments.
+All model hyperparameters are documented in a file "hyperparams.txt", which are passed to different steps in the pipeline:
+- scripts/preprocess-bpe.sh: Preprocess bitext via subword segmentation
 - scripts/train.sh: Train the NMT model given bitext
 - scripts/translate.sh: Translates a tokenized input file using an existing model
 
@@ -20,7 +18,7 @@ git clone https://github.com/kevinduh/sockeye-recipes2.git sockeye-recipes2
 ```
 
 We assume that Anaconda for Python virtual environments is available on the system.
-Run the following to install Sockeye in a Anaconda environments named `sockeye2`:
+All code needed by the scripts are installed in an Anaconda environment named `sockeye2`:
 
 ```bash
 cd path/to/sockeye-recipes2
@@ -28,12 +26,19 @@ bash ./install/install_sockeye_gpu.sh
 bash ./install/install_tools.sh
 ```
 
+If you need to backup or remove your Anaconda environment before re-installing: 
+```bash
+conda create --name sockeye2_bkup --clone sockeye2
+conda remove --name sockeye2 --all
+```
 
 ## Recipes 
 
 The `egs` subdirectory contains recipes for various datasets. 
 
 * [egs/quickstart](egs/quickstart): For first time users, this recipe explains how sockeye-recipe works. 
+
+* [egs/ted](egs/ted): Recipes for training various NMT models, using a TED Talks dataset consisting of 20 different languages.
 
 The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. Besides NMT hyerparameters, the most important variables in this file to set are below: 
 
