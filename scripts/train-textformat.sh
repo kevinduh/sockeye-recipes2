@@ -72,6 +72,7 @@ python -m sockeye.train -s $train_bpe_src \
                         --transformer-model-size $transformer_model_size \
                         --transformer-attention-heads $transformer_attention_heads \
                         --transformer-feed-forward-num-hidden $transformer_feed_forward_num_hidden \
+                        --weight-tying trg_softmax \
                         --embed-dropout $embed_dropout \
                         --label-smoothing $label_smoothing \
                         --checkpoint-interval $checkpoint_interval \
