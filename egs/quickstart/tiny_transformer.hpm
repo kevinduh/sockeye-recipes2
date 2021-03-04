@@ -95,6 +95,7 @@ transformer_feed_forward_num_hidden=32
 embed_dropout=".0:.0"
 label_smoothing=0.1
 batch_size=4096
+update_interval=1
 loss="cross-entropy"
 seed=13
 

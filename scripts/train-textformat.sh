@@ -76,6 +76,7 @@ python -m sockeye.train -s $train_bpe_src \
                         --label-smoothing $label_smoothing \
                         --checkpoint-interval $checkpoint_interval \
                         --batch-size $batch_size \
+                        --update-interval $update_interval \
                         --min-num-epochs $min_num_epochs \
                         --max-num-epochs $max_num_epochs \
                         --max-updates $max_updates \
