@@ -70,8 +70,10 @@ Alternatively, all these commands can also be used in conjunction with the Sun/U
 
 ```
 sed "s|tiny_transformer|tiny_transformer_gpu|" tiny_transformer.hpm > tiny_transformer_gpu.hpm
+
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=1 -j y ../../scripts/train-textformat.sh -p tiny_transformer_gpu.hpm -e sockeye2
-(or for CLSP grid)
+
+(for CLSP grid)
 qsub -S /bin/bash -V -cwd  -l gpu=1,h_rt=24:00:00,num_proc=1 -j y ../../scripts/train-textformat.sh -p tiny_transformer_gpu.hpm -e sockeye2
 ```
 
@@ -102,9 +104,10 @@ This `translate.sh` script will find the model from hyperparams file. Then it ru
 ```bash
 conda activate sockeye2
 tensorboard --logdir ./
+```
 
 Then follow the instructions, e.g. pointing your browser to http://localhost:6006 . Note that not all features of Google's tensorboard is implemented in this DMLC MXNet port, but at least you can currently visualize perplexity curves and a few other useful things. 
-```
+
 
 All results are stored in the `$modeldir`. The ones of interest:
 
