@@ -71,24 +71,24 @@ This should give a BLEU score of around 17.
 
 The test set BLEU scores of various tasks are:
 
- task | ts1 | 
-  --- | --- | 
-ar-en | 28.75 |
-bg-en | 36.84 |
-cs-en | 27.82 |
-de-en | 33.75 |
-fa-en | 22.59 |
-fr-en | 35.81 |
-he-en | 35.02 |
-hu-en | 22.49 |
-id-en | 27.92 |
-ja-en | 12.47 |
-ko-en | 16.16 |
-pl-en | 24.66 |
-pt-en | 42.40 |
-ro-en | 36.27 |
-ru-en | 24.49 |
-tr-en | 24.12 |
-uk-en | 19.30 |
-vi-en | 26.38 |
-zh-en | 17.01 |
+ task | ts1   | tm1 |
+  --- | ---   | --- |
+ar-en | 28.75 | 29.16 |
+bg-en | 36.84 | 36.88 |
+cs-en | 27.82 | 27.65 | 
+de-en | 33.75 | 33.50 | 
+fa-en | 22.59 | 22.41 | 
+fr-en | 35.81 | 35.81 |
+he-en | 35.02 | 34.82 | 
+hu-en | 22.49 | 22.53 |
+id-en | 27.92 | 26.29 |
+ja-en | 12.47 | 11.80 |
+ko-en | 16.16 | 15.81 |
+pl-en | 24.66 | 23.96 |
+pt-en | 42.40 | 41.99 |
+ro-en | 36.27 | 36.04 |
+ru-en | 24.49 | 24.03 |
+tr-en | 24.12 | 24.26 |
+uk-en | 19.30 | 17.57 |
+vi-en | 26.38 | 25.66 |
+zh-en | 17.01 | 16.73 |
