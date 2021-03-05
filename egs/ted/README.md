@@ -35,7 +35,7 @@ Now, we can preprocess the tokenized training and dev data using BPE.
 
 The resulting BPE vocabulary file (for English) is: `data-bpe/train.bpe-30000.en.bpe_vocab` and the segmented training file is: `data-bpe/train.bpe-30000.en`. For Chinese, replace `en` by `zh`. These are the files we train on. 
 
-To train, we will use qsub and gpu (On a GeForce GTX 1080 Ti, this should take about 4 hours):
+To train, we will use qsub and gpu (On a Tesla V100, this should take about 6 hours):
 
 ```bash
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=1 -j y ../../../scripts/train-textformat.sh -p ts1.hpm -e sockeye2
@@ -64,7 +64,7 @@ When this is finished, we have the translations in `ts1/ted_test1_en-zh.tok.en.1
 ../../../tools/multi-bleu.perl ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.en < ts1/ted_test1_en-zh.tok.en.1best
 ```
 
-This should give a BLEU score of around 16.8.
+This should give a BLEU score of around 17.
 
 
 ### Benchmark Results 
@@ -73,22 +73,22 @@ The test set BLEU scores of various tasks are:
 
  task | ts1 | 
   --- | --- | 
-ar-en | |
-bg-en | |
-cs-en | |
-de-en | |
-fa-en | |
-fr-en | |
-he-en | |
-hu-en | |
-id-en | |
-ja-en | |
-ko-en | |
-pl-en | |
-pt-en | |
-ro-en | |
-ru-en | |
-tr-en | |
-uk-en | |
-vi-en | |
-zh-en | 16.85 |
+ar-en | 28.75 |
+bg-en | 36.84 |
+cs-en | 27.82 |
+de-en | 33.75 |
+fa-en | 22.59 |
+fr-en | 35.81 |
+he-en | 35.02 |
+hu-en | 22.49 |
+id-en | 27.92 |
+ja-en | 12.47 |
+ko-en | 16.16 |
+pl-en | 24.66 |
+pt-en | 42.40 |
+ro-en | 36.27 |
+ru-en | 24.49 |
+tr-en | 24.12 |
+uk-en | 19.30 |
+vi-en | 26.38 |
+zh-en | 17.01 |
