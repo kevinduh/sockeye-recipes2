@@ -36,7 +36,7 @@
 
 ### User-specified directories ###
 workdir=__WORKDIR__
-modeldir=$workdir/ts2
+modeldir=$workdir/tm2
 rootdir=__ROOTDIR__
 
 ### Language pair (source and target) ###
@@ -85,10 +85,10 @@ bpe_vocab_trg=${train_bpe_trg}.bpe_vocab
 # Model architecture
 encoder="transformer"
 decoder="transformer"
-num_layers="2:2"
-transformer_model_size=512
+num_layers="6:6"
+transformer_model_size=256
 transformer_attention_heads=8
-transformer_feed_forward_num_hidden=1024
+transformer_feed_forward_num_hidden=512
 
 # Training configuration
 embed_dropout=".0:.0"

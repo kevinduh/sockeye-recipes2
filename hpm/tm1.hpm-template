@@ -38,7 +38,6 @@
 workdir=__WORKDIR__
 modeldir=$workdir/tm1
 rootdir=__ROOTDIR__
-# DESCRIPTION: rm1: RNN-based seq2seq model, medium
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 

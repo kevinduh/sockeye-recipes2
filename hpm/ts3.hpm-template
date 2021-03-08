@@ -38,7 +38,6 @@
 workdir=__WORKDIR__
 modeldir=$workdir/ts3
 rootdir=__ROOTDIR__
-# DESCRIPTION: ts3: Transformer model, small
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
