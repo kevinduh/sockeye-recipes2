@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+# Takes a model, source file, and other info.
+# Does chunking then farms it out, then resets.
+# originally written by Matt Post, modified by Kevin Duh
+
+# Example usage:
+#     qsub ~/src/mt/sockeye-recipes2/local/distributed-translate.qsub gpu.q@@rtx /exp/scale18/mt/data/zh-en/wmt17/wmt17.test.bpe.zh wmt17.en.1best -p /exp/kduh/p/scale/scale2018/sockeye2/zh-en/generaldomain/ts1.txt -e sockeye2 -b 16 -s
+
+#$ -S /bin/bash -V -cwd
+#$ -q all.q -l h_rt=500:00:00
+#$ -j y -o logs-qsub/
+
+ROOTDIR=~kduh/src/mt/sockeye-recipes2
+SCRATCHDIR=/expscratch/kduh/tmp/mt
+CHUNKSIZE=100000
+tc=20
+
+set -eu
+
+gridqueue=$1
+input=$2
+output=$3
+
+shift
+shift
+shift
+
+echo "SCRATCHDIR=$SCRATCHDIR"
+
+if [[ ${SGE_TASK_ID:-undefined} == "undefined" ]]; then
+    datadir=$(dirname $output)/.$(basename $input)
+    if [[ ! -d $datadir ]]; then
+        echo "Creating tempdir=$datadir"
+        mkdir -p $datadir
+        split --numeric-suffixes=1 -a 5 -l $CHUNKSIZE $input $datadir/chunk.
+        ls $datadir/chunk.* > $datadir/chunks.txt
+    fi
+
+    rm -f $datadir/notdone.txt
+    touch $datadir/notdone.txt
+    numchunks=$(cat $datadir/chunks.txt | wc -l)
+    for num in $(seq 1 $numchunks); do
+        chunkfile=$(~kduh/bin/mpost-bin/lines $num $datadir/chunks.txt)
+
+        linesneeded=$(cat $chunkfile | wc -l)
+        linesdone=0
+        outchunkfile=$(dirname $chunkfile)/out.chunk.$num
+        echo "$num: outchunkfile is $outchunkfile"
+        if [[ -e $outchunkfile ]]; then
+            linesdone=$(cat $outchunkfile | wc -l)
+        fi
+        if [[ $linesdone -ne $linesneeded ]]; then
+            echo "$num: have done $linesdone, need $linesneeded"
+            echo $chunkfile >> $datadir/notdone.txt
+        fi
+    done
+
+    # farm out
+    numnotdone=$(cat $datadir/notdone.txt | wc -l)
+    echo "Farming out $numnotdone chunks of $datadir/notdone.txt for $output on $gridqueue (args: $@)"
+    qsub -S /bin/bash -cwd -v SCRATCHDIR=$SCRATCHDIR -q $gridqueue -l gpu=1 -l h_rt=72:00:00 -sync y -t 1:$numnotdone -tc $tc $ROOTDIR/local/distributed-translate.qsub $gridqueue $datadir/notdone.txt $datadir/out.chunk "$@"
+
+    # recombine when done
+    [[ ! -d $(dirname $output) ]] && mkdir -p $(dirname $output)
+    for chunkno in $(seq 1 $numchunks); do
+        cat $datadir/out.chunk.$chunkno
+    done > $output
+    for chunkno in $(seq 1 $numchunks); do
+	echo "==== Chunk translate: $datadir/out.chunk.$chunkno.log ===="
+        cat $datadir/out.chunk.$chunkno.log
+    done > $output.log
+
+    # clean up
+    linesneeded=$(cat $input | wc -l)
+    linesproduced=$(cat $output | wc -l)
+    if [[ $linesneeded -eq $linesproduced ]]; then
+        echo "All done, and line counts match. Removing $datadir..."
+        rm -rf $datadir
+    else
+        echo "All done, but needed $linesneeded and only translated $linesproduced."
+        echo "You should take a look in $datadir to see what went wrong..."
+    fi
+else
+
+    # Process one chunk
+    inchunk=$(~kduh/bin/mpost-bin/lines $SGE_TASK_ID $input)
+    chunknum=$(basename $inchunk | cut -d. -f2 | perl -pe 's/^0+//')
+    outchunk=$output.$chunknum
+    echo "INPUT $inchunk OUTPUT $outchunk"
+
+    linesneeded=$(cat $inchunk | wc -l)
+    if [[ ! -e $outchunk ]]; then
+        linesproduced=0
+    else
+        linesproduced=$(cat $outchunk | wc -l)
+    fi
+
+    if [[ $linesneeded -ne $linesproduced ]]; then
+        echo "Translating chunk $input[$chunknum] $inchunk to $outchunk..."
+        bash $ROOTDIR/scripts/translate.sh -i $inchunk -o $outchunk $@
+    else
+        echo "Chunk $input[$chunknum] ($inchunk) is already completed at $outchunk, skipping."
+    fi
+fi
