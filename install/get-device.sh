@@ -47,7 +47,10 @@ if [ "$USE_DEVICE" == "cpu" ]; then
     
 elif [ "$USE_DEVICE" == "gpu" ]; then
     # Use GPU
-    
+    gpuprocessPID=$(nvidia-smi -q -x | grep pid | sed -e 's/<pid>//g' -e 's/<\/pid>//g' -e 's/^[[:space:]]*//')
+    [[ -n "$gpuprocessPID" ]] && gpuprocess=$(ps -up $gpuprocessPID) || gpuprocess=""
+    nvsmi=`nvidia-smi`
+
     if [ $CUDA_VISIBLE_DEVICES ]; then
 	# If CUDA_VISIBLE_DEVICES is already set, just return 0,1,...,maxid
 	# Setting CUDA_VISIBLE_DEVICES to multiple devices enables multi-gpu jobs
@@ -55,7 +58,7 @@ elif [ "$USE_DEVICE" == "gpu" ]; then
 	maxid=$(expr "${#visible[@]}" - 1)
 	visible_mapping=$(seq -s ' ' 0 $maxid)
 	device="--device-ids $visible_mapping"
-	devicelog="get-device.sh: On $HOSTNAME CUDA_VISIBLE_DEVICES = $CUDA_VISIBLE_DEVICES found, map to device-ids = $visible_mapping. `nvidia-smi`"
+	devicelog="get-device.sh: On $HOSTNAME CUDA_VISIBLE_DEVICES = $CUDA_VISIBLE_DEVICES found, map to device-ids = $visible_mapping. $nvsmi $gpuprocess"
 	
     else
 	# Else, look for a single free GPU
@@ -71,11 +74,11 @@ elif [ "$USE_DEVICE" == "gpu" ]; then
             # Randomly pick one gpu id to return
             pick=$(expr $RANDOM % $numfree )
             device="--device-ids ${freegpu[$pick]}"
-            echo "get-device.sh: Picking device-id = ${freegpu[$pick]} from free GPUs: ${freegpu[@]}. `nvidia-smi`"
+            devicelog="get-device.sh: Picking device-id = ${freegpu[$pick]} from free GPUs: ${freegpu[@]}. $nvsmi $gpuprocess"
 	else
             # No GPUs, default back to CPU
             device="--use-cpu"
-            devicelog="get-device.sh: On $HOSTNAME Using CPU because no free GPUs. `nvidia-smi`"
+            devicelog="get-device.sh: On $HOSTNAME Using CPU because no free GPUs. $nvsmi $gpuprocess"
 	fi
     fi
 else
@@ -85,3 +88,4 @@ fi
 
 echo "$device"
 echo "$devicelog"
+echo 
