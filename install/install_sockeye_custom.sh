@@ -69,7 +69,7 @@ source ./install/path.sh
 venv=$ENV_NAME # set your virtual enviroment name
 if [[ "$FORCE_NEW_ENV" == true || ! -d $CONDA_HOME/$ENV_NAME ]]; then
   errcho "Creating new Conda env : $ENV_NAME"
-  conda create -y -n $venv python=3.6
+  conda create -y -n $venv python=3.7
 fi
 
 source activate $venv
@@ -78,7 +78,7 @@ export PYTHONNOUSERSITE=1
 # 2. clone sockeye NMT as submodule and install
 cd $SOCKEYE
 if [[ "$DEVICE" == "gpu" ]]; then
-  pip install -r requirements/requirements.gpu-cu102.txt 
+  pip install -r requirements/requirements.gpu-cu112.txt 
 elif [[ "$DEVICE" == "cpu" ]]; then
   pip install -r requirements/requirements.txt
 else
