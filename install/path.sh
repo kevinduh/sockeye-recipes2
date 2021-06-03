@@ -2,7 +2,7 @@
 # It sets some system-specific path settings. 
 
 module load cuda11.2/toolkit/11.2.2-1
-module load cudnn/8.2.0.53_cuda11.x
+module load cudnn/8.1.1.33_cuda11.0-2
 module load nccl/2.8.4_cuda11.2
 module list
 
