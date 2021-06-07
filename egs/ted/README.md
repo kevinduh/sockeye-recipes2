@@ -71,7 +71,7 @@ This should give a BLEU score of around 17.
 
 The test set BLEU scores of various tasks are:
 
- task | ts1   | ts2   | ts3   | tm1   | tm2   | e6-d2-1 |
+ task | ts1   | tb2   | tb3   | tm1   | tm2   | b2-e6d2 |
   --- | ---   | ---   | ---   | ---   | ---   | ---     |
 ar-en | 28.75 | 29.33 | 28.16 | 29.16 | 28.74 | 28.72   |
 bg-en | 36.84 | 36.07 | 35.17 | 36.88 | 36.16 | 34.95   |
