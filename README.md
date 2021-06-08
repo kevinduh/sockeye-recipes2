@@ -1,7 +1,7 @@
 # sockeye-recipes2
 
 Training scripts and recipes for the Sockeye Neural Machine Translation (NMT) toolkit
-- The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye). This repo is based off [a stable fork](https://github.com/kevinduh/sockeye), version: 2.3.16
+- The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye). This repo is based off [a stable fork](https://github.com/kevinduh/sockeye), version: 2.3.17
 - Here we focus on Sockeye v2. This repo is similar but not exactly back-compatible with the older version of [sockeye-recipes for Sockeye v1](https://github.com/kevinduh/sockeye-recipes).
 
 This repo contains scripts that makes it easy to run and replicate NMT experiments.
