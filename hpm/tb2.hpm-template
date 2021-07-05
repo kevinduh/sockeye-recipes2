@@ -36,7 +36,7 @@
 
 ### User-specified directories ###
 workdir=__WORKDIR__
-modeldir=$workdir/tm2
+modeldir=$workdir/tb2
 rootdir=__ROOTDIR__
 
 ### Language pair (source and target) ###
